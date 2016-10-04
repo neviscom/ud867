@@ -6,9 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.nevis.jokes.JokesTeller;
-import com.nevis.nanodegree.displayjokes.DisplayJokeActivity;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void tellJoke(View view) {
-        startActivity(DisplayJokeActivity.startIntent(this, JokesTeller.nextJoke()));
+        new EndpointsAsyncTask().execute(this);
     }
 
 
