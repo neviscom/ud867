@@ -3,8 +3,14 @@ package com.udacity.gradle.builditbigger;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.extensions.android.json.AndroidJsonFactory;
+import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
+import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
 import com.nevis.nanodegree.displayjokes.DisplayJokeActivity;
-import com.nikita.simonov.jokes.backend.MyEndpoint;
+import com.nikita.simonov.jokes.backend.myApi.MyApi;
+
+import java.io.IOException;
 
 /**
  * @author Nikita Simonov
@@ -12,13 +18,26 @@ import com.nikita.simonov.jokes.backend.MyEndpoint;
 
 public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
-    private final static MyEndpoint sMyEndpoint = new MyEndpoint();
     private  Context mContext;
 
     @Override
     protected String doInBackground(Context... params) {
         mContext = params[0];
-        return sMyEndpoint.getJoke().getData();
+        try {
+            return new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
+                    .setRootUrl("http://10.0.2.2:8080/_ah/api/")
+                    .setGoogleClientRequestInitializer(new GoogleClientRequestInitializer() {
+                        @Override
+                        public void initialize(AbstractGoogleClientRequest<?> request) throws IOException {
+                            request.setDisableGZipContent(true);
+                        }
+                    })
+                    .build()
+                    .getJoke().execute().getData();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override

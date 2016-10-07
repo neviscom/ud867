@@ -89,7 +89,6 @@
     // A function that attaches a "Say Hello" button click handler
     function enableClick() {
       document.getElementById('helloButton').onclick = function() {
-        var name = document.getElementById('nameInput').value;
         gapi.client.myApi.getJoke().execute(
           function(response) {
             var outputAlertDiv = document.getElementById('outputAlert');
