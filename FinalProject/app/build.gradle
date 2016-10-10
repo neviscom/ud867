@@ -22,12 +22,22 @@ android {
     configurations.all {
         resolutionStrategy.force 'com.google.code.findbugs:jsr305:1.3.9'
     }
+
+    productFlavors {
+        free {
+            applicationId "com.udacity.gradle.builditbigger.free"
+        }
+        paid {
+            applicationId "com.udacity.gradle.builditbigger.paid"
+        }
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.2.1'
-    compile 'com.google.android.gms:play-services-ads:9.4.0'
+
+    freeCompile 'com.google.android.gms:play-services-ads:9.4.0'
 
     compile project(':displayjokes')
     compile project(path: ':backend', configuration: 'android-endpoints')
