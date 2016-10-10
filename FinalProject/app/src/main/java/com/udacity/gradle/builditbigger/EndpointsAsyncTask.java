@@ -1,13 +1,12 @@
 package com.udacity.gradle.builditbigger;
 
-import android.content.Context;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.extensions.android.json.AndroidJsonFactory;
 import com.google.api.client.googleapis.services.AbstractGoogleClientRequest;
 import com.google.api.client.googleapis.services.GoogleClientRequestInitializer;
-import com.nevis.nanodegree.displayjokes.DisplayJokeActivity;
 import com.nikita.simonov.jokes.backend.myApi.MyApi;
 
 import java.io.IOException;
@@ -16,13 +15,22 @@ import java.io.IOException;
  * @author Nikita Simonov
  */
 
-public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
+public class EndpointsAsyncTask extends AsyncTask<Void, Void, String> {
 
-    private  Context mContext;
+    @NonNull
+    private final JokeLoadingCallback mJokeLoadingCallback;
+
+    public EndpointsAsyncTask(@NonNull JokeLoadingCallback jokeLoadingCallback) {
+        mJokeLoadingCallback = jokeLoadingCallback;
+    }
 
     @Override
-    protected String doInBackground(Context... params) {
-        mContext = params[0];
+    protected void onPreExecute() {
+        mJokeLoadingCallback.onStartLoading();
+    }
+
+    @Override
+    protected String doInBackground(Void... params) {
         try {
             return new MyApi.Builder(AndroidHttp.newCompatibleTransport(), new AndroidJsonFactory(), null)
                     .setRootUrl("http://10.0.2.2:8080/_ah/api/")
@@ -42,6 +50,14 @@ public class EndpointsAsyncTask extends AsyncTask<Context, Void, String> {
 
     @Override
     protected void onPostExecute(String joke) {
-        mContext.startActivity(DisplayJokeActivity.startIntent(mContext, joke));
+        mJokeLoadingCallback.onFinishLoading(joke);
+    }
+
+    public interface JokeLoadingCallback {
+
+        void onStartLoading();
+
+        void onFinishLoading(@NonNull String joke);
+
     }
 }
