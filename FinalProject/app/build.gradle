@@ -37,7 +37,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:24.2.1'
 
-    freeCompile 'com.google.android.gms:play-services-ads:9.4.0'
+    freeCompile 'com.google.android.gms:play-services-ads:9.6.1'
+    freeCompile 'com.google.firebase:firebase-ads:9.6.1'
 
     compile project(':displayjokes')
     compile project(path: ':backend', configuration: 'android-endpoints')
@@ -47,3 +48,5 @@ dependencies {
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
 }
+
+apply plugin: 'com.google.gms.google-services'
