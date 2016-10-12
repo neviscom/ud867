@@ -26,11 +26,12 @@ public class ObtainJokesTest {
 
             @Override
             public void onFinishLoading(@NonNull String joke) {
-                assertNotNull(joke);
-                assertTrue(joke.length() > 0);
+                // do nothing
             }
         };
 
-        new EndpointsAsyncTask(callback).execute();
+        String joke = new EndpointsAsyncTask(callback).execute().get();
+        assertNotNull(joke);
+        assertTrue(joke.length() > 0);
     }
 }
